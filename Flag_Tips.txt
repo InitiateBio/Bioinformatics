@@ -1,0 +1,49 @@
+Tips For Various Flag Calls In Various Commonly Used Computational Software.
+
+                                                               ###RANDOM###
+
+## Don't Need A SAM File?
+
+Pipe Minimap2 into SORT--
+
+Simple EX :
+Minimap2 -ax map-ont -t 20 ./REFERENCE_GENOME.fa --junc-bed ./BED.bed ./SAMPLE.fastq.gz | samtools sort -o FILENAME.sorted.bam -@10
+samtools index FILENAME.sorted.bam
+
+
+
+                                                              ###BCFTOOLS###
+
+## MAX MEMORY--
+
+When calling "Sort" use the "-m" flag. This will set max memory to use. (Sort makes temp files,
+by default in 128 MB blocks. This can be problematic with your systems "Upper Limit" as
+only X amount of files may remain in temporary space at once. This flag should be followed by
+an integer and datasize format. This will make fewer files of a larger size. 
+
+To check your "Upper Limit" in Ubuntu type the command "ulimit -n"
+Most likely this will return "1024"
+I don't advise changing this, but you can. 
+
+Simple EX : 
+bamtools sort -m 10G -o FILENAME.BAM 
+
+
+## THREADING--
+Threading is useful for speeding up processing, Should you have capable hardware.
+The command is used by calling "-@" at the end of your command. Follow this with the number of 
+threads youd like to utilize. 
+
+Something like -
+# of cores in processor * 2 = X
+X * # of processors = Max Thread
+(Don't qoute me on that...)
+
+Simple EX :
+bamtools sort -m 10G -o FILENAME.BAM -@10
+
+
+
+
+
+
