@@ -106,22 +106,22 @@ echo "How Many Family Units Are Contained In The Workflow? "
 read FAM_COUNT
 
 #Make Directories
-sudo mkdir <DRIECTORY>/$WORKFLOW
-cd <DRIECTORY>/
+sudo mkdir <DIRECTORY>/$WORKFLOW
+cd <DIRECTORY>/
 sudo chmod 775 *
 cd
 
 #Make Header for .ped *ADDED 3/5/2023
-echo -e "#PED format pedigree\r" >>  <DRIECTORY>/$WORKFLOW/HDR.tab
-echo -e "#\r" >>  <DRIECTORY>/$WORKFLOW/HDR.tab
-echo -e "#fam-id/ind-id/pat-id/mat-id: 0=unknown\r" >>  <DRIECTORY>/$WORKFLOW/HDR.tab
-echo -e "#sex: 1=male, 2=female, 0=unknown\r" >>  <DRIECTORY>/$WORKFLOW/HDR.tab
-echo -e "#phenotype: -9=missing, 0=missing, 1=unaffected, 2=affected\r" >> <DRIECTORY>/$WORKFLOW/HDR.tab
-echo -e "#\r" >> <DRIECTORY>/$WORKFLOW/HDR.tab
+echo -e "#PED format pedigree\r" >>  <DIRECTORY>/$WORKFLOW/HDR.tab
+echo -e "#\r" >>  <DIRECTORY>/$WORKFLOW/HDR.tab
+echo -e "#fam-id/ind-id/pat-id/mat-id: 0=unknown\r" >>  <DIRECTORY>/$WORKFLOW/HDR.tab
+echo -e "#sex: 1=male, 2=female, 0=unknown\r" >>  <DIRECTORY>/$WORKFLOW/HDR.tab
+echo -e "#phenotype: -9=missing, 0=missing, 1=unaffected, 2=affected\r" >> <DIRECTORY>/$WORKFLOW/HDR.tab
+echo -e "#\r" >> <DIRECTORY>/$WORKFLOW/HDR.tab
 
 #Make Headers for temp, and full workflow .TAB files
-echo -e 'Workflow\tFamily_ID\tPatient_ID\tPaternal_ID\tMaternal_ID\tDOB\tSex\tPheno\n' >> <DRIECTORY>/$WORKFLOW/AllSamples.tab
-echo -e 'fam_id\tind_id\tpat_id\tmat_id\tsex\tpheno\n' >> <DRIECTORY>/$WORKFLOW/PED_temp.tab
+echo -e 'Workflow\tFamily_ID\tPatient_ID\tPaternal_ID\tMaternal_ID\tDOB\tSex\tPheno\n' >> <DIRECTORY>/$WORKFLOW/AllSamples.tab
+echo -e 'fam_id\tind_id\tpat_id\tmat_id\tsex\tpheno\n' >> <DIRECTORY>/$WORKFLOW/PED_temp.tab
 
 #Iterations
 #Loop For Total Family Counts
@@ -141,29 +141,29 @@ for (( i=1; i <= "$FAM_COUNT"; i++ ))
 
 #WHO IS WHO ??? (THIS IS A PRESUMPTIOUS ALLOCATION OF GENDER AND AGE; MAKE THIS BETTER -- NO PRESUMPTIONS!!!!!!!!)
                                 if (( GENDER == "1" )) &&  (( DOB < "2005" ));
-                                then    echo -e "$WORKFLOW\t$FAM_ID\t-\t$PATIENT_ID\t-\t$DOB\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/AllSamples.tab
-                                        echo -e "$FAM_ID\t\t$PATIENT_ID\t" >> <DRIECTORY>/$WORKFLOW/Patient_List.tab
-                                        echo -e "$FAM_ID\t-\t$PATIENT_ID\t-\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/PED_temp.tab
+                                then    echo -e "$WORKFLOW\t$FAM_ID\t-\t$PATIENT_ID\t-\t$DOB\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/AllSamples.tab
+                                        echo -e "$FAM_ID\t\t$PATIENT_ID\t" >> <DIRECTORY>/$WORKFLOW/Patient_List.tab
+                                        echo -e "$FAM_ID\t-\t$PATIENT_ID\t-\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/PED_temp.tab
 
                                 elif (( GENDER == "2" )) && (( DOB < "2005"));
-                                then    echo -e "$WORKFLOW\t$FAM_ID\t-\t-\t$PATIENT_ID\t$DOB\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/AllSamples.tab
-                                        echo -e "$FAM_ID\t\t\t$PATIENT_ID" >> <DRIECTORY>/$WORKFLOW/Patient_List.tab
-                                        echo -e "$FAM_ID\t-\t-\t$PATIENT_ID\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/PED_temp.tab
+                                then    echo -e "$WORKFLOW\t$FAM_ID\t-\t-\t$PATIENT_ID\t$DOB\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/AllSamples.tab
+                                        echo -e "$FAM_ID\t\t\t$PATIENT_ID" >> <DIRECTORY>/$WORKFLOW/Patient_List.tab
+                                        echo -e "$FAM_ID\t-\t-\t$PATIENT_ID\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/PED_temp.tab
 
                                 else (( DOB > "2005" ));
-                                        echo -e "$WORKFLOW\t$FAM_ID\t$PATIENT_ID\t-\t-\t$DOB\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/AllSamples.tab
-                                        echo -e "$FAM_ID\t$PATIENT_ID\t\t" >> <DRIECTORY>/$WORKFLOW/Patient_List.tab
-                                        echo -e "$FAM_ID\t$PATIENT_ID\t-\t-\t$GENDER\t0" >> <DRIECTORY>/$WORKFLOW/PED_temp.tab
+                                        echo -e "$WORKFLOW\t$FAM_ID\t$PATIENT_ID\t-\t-\t$DOB\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/AllSamples.tab
+                                        echo -e "$FAM_ID\t$PATIENT_ID\t\t" >> <DIRECTORY>/$WORKFLOW/Patient_List.tab
+                                        echo -e "$FAM_ID\t$PATIENT_ID\t-\t-\t$GENDER\t0" >> <DIRECTORY>/$WORKFLOW/PED_temp.tab
                                 fi
         }
 }
 
-sudo cat <DRIECTORY>/$WORKFLOW/HDR.tab <DRIECTORY>/$WORKFLOW/PED_temp.tab >> <DRIECTORY>/$WORKFLOW/Analysis_PED.ped
+sudo cat <DIRECTORY>/$WORKFLOW/HDR.tab <DIRECTORY>/$WORKFLOW/PED_temp.tab >> <DIRECTORY>/$WORKFLOW/Analysis_PED.ped
 # ADDED 3/5/2023
-awk '$1=$1' <DRIECTORY>/$WORKFLOW/Patient_List.tab >> <DRIECTORY>/$WORKFLOW/Patient_List.sorted.tab
-sudo rm  <DRIECTORY>/$WORKFLOW/HDR.tab
-sudo rm <DRIECTORY>/$WORKFLOW/PED_temp.tab
-sudo rm <DRIECTORY>/$WORKFLOW/Patient_List.tab
-sudo mv <DRIECTORY>/$WORKFLOW/Patient_List.sorted.tab <DRIECTORY>/$WORKFLOW/Patient_List.tab
+awk '$1=$1' <DIRECTORY>/$WORKFLOW/Patient_List.tab >> <DIRECTORY>/$WORKFLOW/Patient_List.sorted.tab
+sudo rm  <DIRECTORY>/$WORKFLOW/HDR.tab
+sudo rm <DIRECTORY>/$WORKFLOW/PED_temp.tab
+sudo rm <DIRECTORY>/$WORKFLOW/Patient_List.tab
+sudo mv <DIRECTORY>/$WORKFLOW/Patient_List.sorted.tab <DIRECTORY>/$WORKFLOW/Patient_List.tab
 
 echo "Success!"
